@@ -1,28 +1,50 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
+import Auth from './Auth/Auth.js';
+
+const STYLE = {
+    backgroundRed: {
+        background: 'red'
+    },
+    backgroundGreen: {
+        background: 'green'
+    }
+};
 
 class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
-    );
-  }
+    constructor(props){
+        super(props);
+        this.state = {auth:new Auth()};
+        this.login = this.login.bind(this);
+        this.handleAuthentication = this.handleAuthentication.bind(this);
+    }
+
+    login() {
+        this.state.auth.login();
+    }
+
+    handleAuthentication(){
+        this.state.auth.handleAuthentication();
+    }
+
+    render() {
+        const url = new URL(window.location.href);
+        const isCallback = url.pathname.includes('callback');
+        if (isCallback){
+            this.handleAuthentication(); 
+        }
+        return (
+            <div className="App">
+            {
+                <div style={STYLE.backgroundRed}>
+                <button onClick={this.login}>
+                    Login
+                </button>
+                </div>
+            }
+            </div>
+        );
+    }
 }
 
 export default App;
