@@ -15,10 +15,19 @@ export default class Auth {
         this.auth0.authorize();
     }
 
+    setSession(authResult) {
+			// Set the time that the Access Token will expire at
+			let expiresAt = JSON.stringify((authResult.expiresIn * 1000) + new Date().getTime());
+			localStorage.setItem('access_token', authResult.accessToken);
+			localStorage.setItem('id_token', authResult.idToken);
+			localStorage.setItem('expires_at', expiresAt);
+		} 
+
     handleAuthentication(){
         this.auth0.parseHash((err, authResult) => {
             if (authResult && authResult.accessToken && authResult.idToken) {
                 console.log(authResult);
+								this.setSession(authResult);
             } else if (err) {
                 console.log(err);
             }
