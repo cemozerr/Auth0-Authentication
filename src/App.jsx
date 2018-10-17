@@ -26,11 +26,13 @@ class App extends Component {
     if (isCallback) {
       try {
         await this.auth.handleAuthentication();
-        this.setState({ isLoggedIn: true });
       } catch (err) {
         // eslint-disable-next-line
         console.log(err);
       }
+    }
+    if (Auth.isAuthenticated()){
+        this.setState({ isLoggedIn: true });
     }
   }
 
