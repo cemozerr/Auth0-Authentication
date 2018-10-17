@@ -14,10 +14,11 @@ const STYLE = {
 };
 
 class App extends Component {
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
     this.auth = new Auth();
     this.state = { isLoggedIn: false };
+    this.login = this.login.bind(this);
   }
 
   async componentWillMount() {
@@ -34,6 +35,10 @@ class App extends Component {
     }
   }
 
+  login() {
+    this.auth.login();
+  }
+
   render() {
     let greeting;
     const { isLoggedIn } = this.state;
@@ -48,7 +53,7 @@ class App extends Component {
     } else {
       greeting = (
         <div style={STYLE.backgroundRed}>
-          <button type="button" onClick={this.auth.login}>
+          <button type="button" onClick={this.login}>
             Login
           </button>
         </div>
