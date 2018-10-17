@@ -3,24 +3,16 @@
 import React, { Component } from 'react';
 import './App.css';
 import Auth from './Auth/Auth';
-
-const STYLE = {
-  backgroundRed: {
-    background: 'red',
-  },
-  backgroundGreen: {
-    background: 'green',
-  },
-};
+import LoginControl from './components/LoginControl';
 
 class App extends Component {
   constructor() {
     super();
     this.auth = new Auth();
-    this.state = { isLoggedIn: false };
+    this.state = { isAuthenticated: false };
   }
 
-  async componentWillMount() {
+  async componentDidMount() {
     const url = new URL(window.location.href);
     const isCallback = url.pathname.includes('callback');
     if (isCallback) {
@@ -32,34 +24,18 @@ class App extends Component {
       }
     }
     if (Auth.isAuthenticated()) {
-      this.setState({ isLoggedIn: true });
+      this.setState({ isAuthenticated: true });
     }
   }
 
   render() {
-    let greeting;
-    const { isLoggedIn } = this.state;
-    if (isLoggedIn) {
-      greeting = (
-        <div style={STYLE.backgroundGreen}>
-          <button type="button" onClick={this.auth.logout}>
-            Logout
-          </button>
-        </div>
-      );
-    } else {
-      greeting = (
-        <div style={STYLE.backgroundRed}>
-          <button type="button" onClick={this.auth.login}>
-            Login
-          </button>
-        </div>
-      );
-    }
+    const { isAuthenticated } = this.state;
     return (
-      <div className="App">
-        {greeting}
-      </div>
+      <LoginControl
+        isAuthenticated={isAuthenticated}
+        logout={this.auth.logout}
+        login={this.auth.login}
+      />
     );
   }
 }
