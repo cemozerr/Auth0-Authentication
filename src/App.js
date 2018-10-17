@@ -3,48 +3,47 @@ import './App.css';
 import Auth from './Auth/Auth.js';
 
 const STYLE = {
-    backgroundRed: {
-        background: 'red'
-    },
-    backgroundGreen: {
-        background: 'green'
-    }
+  backgroundRed: {
+    background: 'red'
+  },
+  backgroundGreen: {
+    background: 'green'
+  }
 };
 
 class App extends Component {
-    constructor(props){
-        super(props);
-        this.state = {auth:new Auth()};
-        this.login = this.login.bind(this);
-        this.handleAuthentication = this.handleAuthentication.bind(this);
-    }
+  constructor(props){
+    super(props);
+    this.auth = new Auth();
+    this.state = {isLoggedIn: false};
+  }
 
-    login() {
-        this.state.auth.login();
+  componentWillMount() {
+    const url = new URL(window.location.href);
+    const isCallback = url.pathname.includes('callback');
+    if (isCallback){
+      this.setState({isLoggedIn: true});
+      this.auth.handleAuthentication(); 
     }
+  }
 
-    handleAuthentication(){
-        this.state.auth.handleAuthentication();
+  render() {
+    var greeting;
+    if (this.state.isLoggedIn){
+      console.log("logged in");
+      greeting = <div style={STYLE.backgroundGreen}><button> Logout </button></div>;
+    } else {
+      console.log("logged out");
+      greeting = <div style={STYLE.backgroundRed}>
+                  <button onClick={this.auth.login}> Login </button>
+                 </div>;
     }
-
-    render() {
-        const url = new URL(window.location.href);
-        const isCallback = url.pathname.includes('callback');
-        if (isCallback){
-            this.handleAuthentication(); 
-        }
-        return (
-            <div className="App">
-            {
-                <div style={STYLE.backgroundRed}>
-                <button onClick={this.login}>
-                    Login
-                </button>
-                </div>
-            }
-            </div>
-        );
-    }
+    return (
+      <div className="App">
+        {greeting}
+      </div>
+    );
+  }
 }
 
 export default App;
