@@ -12,6 +12,7 @@ export default class Auth {
       responseType: 'token id_token',
       scope: 'openid',
     });
+    this.login = this.login.bind(this);
   }
 
   login() {
