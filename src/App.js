@@ -18,12 +18,17 @@ class App extends Component {
     this.state = {isLoggedIn: false};
   }
 
-  componentWillMount() {
+  async componentWillMount() {
     const url = new URL(window.location.href);
     const isCallback = url.pathname.includes('callback');
     if (isCallback){
-      this.setState({isLoggedIn: true});
-      this.auth.handleAuthentication(); 
+      try{
+        await this.auth.handleAuthentication();
+        this.setState({isLoggedIn: true});
+      }
+      catch(err){
+        console.log(err);
+      }
     }
   }
 

@@ -30,12 +30,14 @@ export default class Auth {
   } 
 
   handleAuthentication(){
-    this.auth0.parseHash((err, authResult) => {
-      if (authResult && authResult.accessToken && authResult.idToken) {
-        this.setSession(authResult);
-      } else if (err) {
-        console.log(err);
-      }
+    return new Promise((resolve, reject) => {
+      this.auth0.parseHash((err, authResult) => {
+        if (authResult && authResult.accessToken && authResult.idToken) {
+          resolve(this.setSession(authResult));
+        } else if (err) {
+          reject(err);
+        }
+      })
     });
   }
 
