@@ -1,5 +1,5 @@
 // src/Auth/Auth.js
-/* global localStorage */
+/* global window localStorage */
 
 import auth0 from 'auth0-js';
 
@@ -13,11 +13,24 @@ export default class Auth {
       scope: 'openid',
     });
     this.login = this.login.bind(this);
+    this.logout = this.logout.bind(this);
   }
 
   login() {
     this.auth0.authorize();
   }
+
+  logout() {
+    // Clear Access Token and ID Token from local storage
+    localStorage.removeItem('access_token');
+    localStorage.removeItem('id_token');
+    localStorage.removeItem('expires_at');
+    const { location } = window;
+    const returnURL = `http://${location.hostname}
+    ${location.port ? `:${location.port}` : ''}`;
+    this.auth0.logout({ returnTo: returnURL });
+  }
+
 
   handleAuthentication() {
     return new Promise((resolve, reject) => {
@@ -42,6 +55,9 @@ export default class Auth {
 
   static isAuthenticated() {
     const expiresAt = JSON.parse(localStorage.getItem('expires_at'));
+    if (typeof (expiresAt) !== 'number') {
+      return false;
+    }
     return new Date().getTime() < expiresAt;
   }
 }

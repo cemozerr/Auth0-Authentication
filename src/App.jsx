@@ -31,8 +31,8 @@ class App extends Component {
         console.log(err);
       }
     }
-    if (Auth.isAuthenticated()){
-        this.setState({ isLoggedIn: true });
+    if (Auth.isAuthenticated()) {
+      this.setState({ isLoggedIn: true });
     }
   }
 
@@ -42,7 +42,7 @@ class App extends Component {
     if (isLoggedIn) {
       greeting = (
         <div style={STYLE.backgroundGreen}>
-          <button type="button">
+          <button type="button" onClick={this.auth.logout}>
             Logout
           </button>
         </div>
