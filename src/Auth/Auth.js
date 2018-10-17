@@ -26,8 +26,7 @@ export default class Auth {
     localStorage.removeItem('id_token');
     localStorage.removeItem('expires_at');
     const { location } = window;
-    const returnURL = `http://${location.hostname}
-    ${location.port ? `:${location.port}` : ''}`;
+    const returnURL = `http://${location.hostname}${location.port ? `:${location.port}` : ''}`;
     this.auth0.logout({ returnTo: returnURL });
   }
 
